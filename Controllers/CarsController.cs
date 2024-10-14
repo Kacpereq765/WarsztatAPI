@@ -1,51 +1,55 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WarsztatAPI.Data;
 using Microsoft.EntityFrameworkCore;
-using WarsztatAPI.Models;
+using WarsztatAPI.Data; // Upewnij się, że ta przestrzeń nazw jest poprawna
+using WarsztatAPI.Models; // Upewnij się, że ta przestrzeń nazw jest poprawna
 
-[ApiController]
-[Route("api/[controller]")]
-public class CarsController : ControllerBase
+namespace WarsztatAPI.Controllers
 {
-    private readonly warsztatDbContext _context;
-
-    public CarsController(warsztatDbContext context)
+    [ApiController]
+    [Route("api/[controller]")]
+    public class CarsController : ControllerBase
     {
-        _context = context;
-    }
+        private readonly warsztatDbContext _context;
 
-    [HttpGet] // Zmiana na HttpGet
-    public async Task<IActionResult> GetCars()
-    {
-        try
+        public CarsController(warsztatDbContext context)
         {
-            var cars = await _context.Cars.ToListAsync();
-            return Ok(cars);
-        }
-        catch (Exception ex)
-        {
-            // Logowanie błędu
-            Console.WriteLine($"Błąd podczas pobierania samochodów: {ex.Message}");
-            return StatusCode(500, "Wystąpił błąd podczas przetwarzania żądania.");
-        }
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> AddCar([FromBody] Car car)
-    {
-        if (car == null)
-        {
-            return BadRequest("Invalid data.");
+            _context = context;
         }
 
-        if (!ModelState.IsValid)
+        // GET: api/cars
+        [HttpGet]
+        public async Task<IActionResult> GetCars()
         {
-            return BadRequest(ModelState); // Zwraca błąd walidacji
+            try
+            {
+                var cars = await _context.Cars.ToListAsync();
+                return Ok(cars);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Błąd podczas pobierania samochodów: {ex.Message}");
+                return StatusCode(500, "Wystąpił błąd podczas przetwarzania żądania.");
+            }
         }
 
-        await _context.Cars.AddAsync(car);
-        await _context.SaveChangesAsync();
+        // POST: api/cars
+        [HttpPost]
+        public async Task<IActionResult> AddCar([FromBody] Car car)
+        {
+            if (car == null)
+            {
+                return BadRequest("Invalid data.");
+            }
 
-        return CreatedAtAction(nameof(GetCars), new { id = car.Id }, car); // Zwraca status 201 Created
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState); // Zwraca błąd walidacji
+            }
+
+            await _context.Cars.AddAsync(car);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetCars), new { id = car.Id }, car); // Zwraca status 201 Created
+        }
     }
 }
