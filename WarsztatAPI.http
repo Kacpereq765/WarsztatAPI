@@ -1,0 +1,6 @@
+@WarsztatAPI_HostAddress = http://localhost:5251
+
+GET {{WarsztatAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
