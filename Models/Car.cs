@@ -1,11 +1,18 @@
-﻿namespace WarsztatAPI.Models
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace WarsztatAPI.Models
 {
     public class Car
     {
-        public int Id { get; set; } 
-        public string Model { get; set; }
-        public int Year { get; set; }
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int CarID { get; set; } 
+
         public bool IsBroken { get; set; }
-        public decimal Price { get; set; }
+        public string Model { get; set; }
+        public int Price { get; set; }
+        public int Year { get; set; }
     }
+
 }

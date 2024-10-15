@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using WarsztatAPI.Data; // Upewnij się, że ta przestrzeń nazw jest poprawna
-using WarsztatAPI.Models; // Upewnij się, że ta przestrzeń nazw jest poprawna
+using warsztat.Data; 
+using WarsztatAPI.Models;
 
 namespace WarsztatAPI.Controllers
 {
@@ -9,9 +9,9 @@ namespace WarsztatAPI.Controllers
     [Route("api/[controller]")]
     public class CarsController : ControllerBase
     {
-        private readonly warsztatDbContext _context;
+        private readonly warsztatDbContext _context; 
 
-        public CarsController(warsztatDbContext context)
+        public CarsController(warsztatDbContext context) 
         {
             _context = context;
         }
@@ -49,7 +49,7 @@ namespace WarsztatAPI.Controllers
             await _context.Cars.AddAsync(car);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetCars), new { id = car.Id }, car); // Zwraca status 201 Created
+            return CreatedAtAction(nameof(GetCars), new { CarID = car.CarID }, car); // Zwraca status 201 Created
         }
     }
 }
