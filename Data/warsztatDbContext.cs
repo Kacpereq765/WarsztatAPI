@@ -11,10 +11,13 @@ namespace warsztat.Data
 
         public DbSet<Worker> Workers { get; set; }
 
+        public DbSet<Workshop> Workshops { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Car>().ToTable("Cars");
             modelBuilder.Entity<Worker>().ToTable("Worker");
+            modelBuilder.Entity<Workshop>().ToTable("Workshop");
         }
     }
 }
