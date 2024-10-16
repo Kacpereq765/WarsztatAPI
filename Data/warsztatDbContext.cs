@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using WarsztatAPI.Models; 
+using WarsztatAPI.Models;
 
 namespace warsztat.Data
 {
@@ -9,9 +9,12 @@ namespace warsztat.Data
 
         public DbSet<Car> Cars { get; set; }
 
+        public DbSet<Worker> Workers { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Car>().ToTable("Cars");
+            modelBuilder.Entity<Worker>().ToTable("Worker");
         }
     }
 }
