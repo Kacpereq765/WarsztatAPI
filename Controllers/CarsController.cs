@@ -51,5 +51,35 @@ namespace WarsztatAPI.Controllers
 
             return CreatedAtAction(nameof(GetCars), new { CarID = car.CarID }, car); // Zwraca status 201 Created
         }
+
+        // DELETE: api/cars/{id}
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteCar(int id)
+        {
+            try
+            {
+                // Znajdujemy samochód po ID
+                var car = await _context.Cars.FindAsync(id);
+
+                // Sprawdzamy, czy samochód istnieje
+                if (car == null)
+                {
+                    return NotFound("Car not found.");
+                }
+
+                // Usuwamy samochód z kontekstu
+                _context.Cars.Remove(car);
+
+                // Zapisujemy zmiany w bazie danych
+                await _context.SaveChangesAsync();
+
+                return NoContent(); // Zwraca status 204 No Content
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Błąd podczas usuwania samochodu: {ex.Message}");
+                return StatusCode(500, "Wystąpił błąd podczas przetwarzania żądania.");
+            }
+        }
     }
 }

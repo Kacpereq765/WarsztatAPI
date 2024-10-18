@@ -71,5 +71,29 @@ namespace WarsztatAPI.Controllers
 
             return CreatedAtAction(nameof(GetWorkshop), new { id = workshop.WorkshopID }, workshop); // Zwraca status 201 Created
         }
+
+        // DELETE: api/workshops/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteWorkshop(int id)
+        {
+            try
+            {
+                var workshop = await _context.Workshops.FindAsync(id);
+                if (workshop == null)
+                {
+                    return NotFound(); // Zwraca 404 jeśli warsztat nie istnieje
+                }
+
+                _context.Workshops.Remove(workshop);
+                await _context.SaveChangesAsync(); // Zapisanie zmian do bazy danych
+
+                return NoContent(); // Zwraca 204 No Content, gdy usunięcie się powiedzie
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Błąd podczas usuwania warsztatu o ID {id}: {ex.Message}");
+                return StatusCode(500, "Wystąpił błąd podczas przetwarzania żądania.");
+            }
+        }
     }
 }

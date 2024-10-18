@@ -65,5 +65,21 @@ namespace WarsztatAPI.Controllers
 
             return CreatedAtAction(nameof(GetWorker), new { id = worker.WorkerID }, worker);
         }
+
+        // DELETE: api/workers/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteWorker(int id)
+        {
+            var worker = await _context.Workers.FindAsync(id);
+            if (worker == null)
+            {
+                return NotFound(); // Jeśli pracownik nie został znaleziony, zwróć 404
+            }
+
+            _context.Workers.Remove(worker); // Usunięcie pracownika z kontekstu
+            await _context.SaveChangesAsync(); // Zapisanie zmian w bazie danych
+
+            return NoContent(); // Zwrócenie 204 No Content po udanym usunięciu
+        }
     }
 }
